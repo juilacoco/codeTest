@@ -1,0 +1,98 @@
+<div *ngIf = "show">
+    <div id = "errors">
+        <!-- email -->
+          <div [hidden]="email.valid || email.untouched">
+              <div  *ngIf="email.errors && email.errors.required">
+                * Email is required
+              </div>
+              <div  *ngIf="email.errors && email.errors.pattern">
+                * Email is invalid
+              </div>
+            </div>
+            <!-- password -->
+            <div *ngIf="!(password.untouched)">
+                <div *ngIf="password.value.length <= 8">
+                  * Please at least 8 digits
+                </div>
+                <div  *ngIf="!checkChar(password.value)">
+                  * Please have at least 1 character
+                </div>
+      
+                <div  *ngIf="!checkSpecialChar(password.value)">
+                  * Please have at least 1 special character (@#$%~)
+                </div>
+              </div>
+      </div>
+    
+    <div class="container">
+    
+       
+      <div>
+        <form (ngSubmit) = "onSubmit()" #userForm = "ngForm"
+        style="text-align: center">
+           
+          <div class="form-group">
+            <label for="email"> Email: </label>
+            <input type="email" id="email" [(ngModel)]="user.email" name='userEmail' #email="ngModel"
+              pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$" required>
+    
+            <div [hidden]="email.valid || email.untouched">
+              <div style="color: orange" *ngIf="email.errors && email.errors.required">
+                Email is required
+              </div>
+              <div style="color: red" *ngIf="email.errors && email.errors.pattern">
+                Email is invalid
+              </div>
+            </div>
+          </div>
+          <br>
+          <div class="form-group">
+            <label for="subscriptionType">Subscription Type: </label>
+            <select class="form-control" id="type" [(ngModel)]="user.subscriptionType" name='userSubType' #subType='ngModel'
+              required>
+              <option *ngFor="let type of subscriptionTypes" [value]="type">
+                {{type}}
+              </option>
+    
+            </select>
+          </div>
+          <br>
+          <div class="form-group">
+            <label for="password">Password: </label>
+            <input type="password" id="pwd" [(ngModel)]="user.password" name='userPassworld' #password="ngModel" minlength="8"
+              required>
+            <div *ngIf="!(password.untouched)">
+              <div style="color: red" *ngIf="password.value.length <= 8">
+                please at least 8 digits
+              </div>
+              <div style="color: orange" *ngIf="!checkChar(password.value)">
+                please have at least 1 character
+              </div>
+    
+              <div style="color:palevioletred" *ngIf="!checkSpecialChar(password.value)">
+                please have at least 1 special character (@#$%~)
+              </div>
+            </div>
+    
+    
+          </div>
+        </form>
+      </div>
+    
+    
+      <br>
+    
+      <div class="row" style="text-align: center">
+        <button  type = "submit"
+        [disabled] = "!userForm.form.valid"
+        (click) = "submit()">Submit</button>
+        <button (click) = "clear()">Clear</button>
+      </div>
+    </div>
+</div>
+
+<div *ngIf = "!show">
+    <app-display-user [user]="user"></app-display-user>
+</div>
+
+
